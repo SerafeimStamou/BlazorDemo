@@ -29,7 +29,7 @@ namespace CRUD
             }
             catch(Exception ex)
             {
-                result.ErrorMessage = ex.Message;
+                result.Message = ex.Message;
                 result.HasFatalErrors = true;
                 return result;
             }
@@ -46,7 +46,7 @@ namespace CRUD
             }
             catch (Exception ex)
             {
-                result.ErrorMessage = ex.Message;
+                result.Message = ex.Message;
                 result.HasFatalErrors = true;
                 return result;
             }
@@ -77,19 +77,31 @@ namespace CRUD
             }
             catch (Exception ex)
             {
-                result.ErrorMessage = ex.Message;
+                result.Message = ex.Message;
                 result.HasFatalErrors = true;
                 return result;
             }
         }
 
-        public async Task Delete(int id)
+        public async Task<DatabaseResult> Delete(int id)
         {
-            var person = await _databaseAccess.FindById<Person>($"SELECT * FROM People WHERE Id={id}");
+            try
+            {
+                var person = await _databaseAccess.FindById<Person>($"SELECT * FROM People WHERE Id={id}");
 
-            string query = $"DELETE FROM People WHERE Id={person.Id}";
+                string query = $"DELETE FROM People WHERE Id={person.Id}";
 
-            await _databaseAccess.ManipulateData(query, person);
+                await _databaseAccess.ManipulateData(query, person);
+
+                result.Message = "Person deleted successfully";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                result.HasFatalErrors = true;
+                return result;
+            }
         }
     }
 }
