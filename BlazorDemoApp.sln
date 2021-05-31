@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDemo", "BlazorDemo\BlazorDemo.csproj", "{0EDC61CB-C920-4137-88CD-4BC51168ADC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "BlazorDemo\Api.csproj", "{0EDC61CB-C920-4137-88CD-4BC51168ADC2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{4795E3F8-977D-485D-8A71-E337D38AE167}"
 EndProject
