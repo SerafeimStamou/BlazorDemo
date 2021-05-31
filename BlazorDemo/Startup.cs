@@ -1,4 +1,6 @@
+using AutoMapper;
 using CRUD;
+using CRUD.Profiles;
 using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +32,8 @@ namespace BlazorDemo
             });
             services.AddTransient<IDatabaseAccess, DatabaseAccess>();
             services.AddTransient<IPersonCrud, PersonCrud>();
+            //services.AddTransient<IMapper, Mapper>();
+            services.AddAutoMapper(typeof(PersonProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

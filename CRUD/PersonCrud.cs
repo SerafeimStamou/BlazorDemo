@@ -1,4 +1,5 @@
-﻿using CRUD.DTOs;
+﻿using AutoMapper;
+using CRUD.DTOs;
 using CRUD.Models;
 using DataAccess;
 using System;
@@ -9,11 +10,14 @@ namespace CRUD
     public class PersonCrud : IPersonCrud
     {
         private readonly IDatabaseAccess _databaseAccess;
+        private readonly IMapper _mapper;
+
         DatabaseResult result;
 
-        public PersonCrud(IDatabaseAccess databaseAccess)
+        public PersonCrud(IDatabaseAccess databaseAccess, IMapper mapper)
         {
             _databaseAccess = databaseAccess;
+            _mapper = mapper;
             result = new();
         }
 
@@ -58,17 +62,10 @@ namespace CRUD
             {
                 var personFromDb = await _databaseAccess.FindById<Person>($"SELECT * FROM People WHERE Id={person.Id}");
 
-                Person newPerson = new()
-                {
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
-                    Email = person.Email,
-                    DateOfBirth = person.DateOfBirth,
-                    Gender = person.Gender
-                };
+               var newPerson =  _mapper.Map(person, personFromDb);
 
                 string query = @$"UPDATE People SET FirstName=@FirstName, LastName=@LastName, Email=@Email,
-                             DateOfBirth=@DateOfBirth, Gender=@Gender WHERE Id={person.Id}";
+                             DateOfBirth=@DateOfBirth, Gender=@Gender WHERE Id={newPerson.Id}";
 
                 await _databaseAccess.ManipulateData(query, newPerson);
 
