@@ -84,11 +84,9 @@ namespace CRUD
         {
             try
             {
-                var person = await _databaseAccess.FindById<Person>($"SELECT * FROM People WHERE Id={id}");
+                string query = $"DELETE FROM People WHERE Id={id}";
 
-                string query = $"DELETE FROM People WHERE Id={person.Id}";
-
-                await _databaseAccess.ManipulateData(query, person);
+                await _databaseAccess.ManipulateData<Person>(query, new());
 
                 result.Message = "Person deleted successfully";
                 return result;
