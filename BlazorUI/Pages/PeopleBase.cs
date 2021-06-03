@@ -10,33 +10,39 @@ namespace BlazorUI.Pages
 {
     public class PeopleBase : ComponentBase
     {
-        public List<Person> people { get; set; }
-        public DatabaseResult result { get; set; }
-
+        public List<Person> People { get; set; } = new();
+        public DatabaseResult Result { get; set; } = new();
+        public string Message { get; set; }
+        
         [Inject]
         protected  IHttpClientFactory _clientFactory { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            HttpRequestMessage request = new(HttpMethod.Get, "https://localhost:44334/api/Person");
+                HttpRequestMessage request = new(HttpMethod.Get, "https://localhost:44334/api/Person");
 
-            var client = _clientFactory.CreateClient();
+                HttpClient client = _clientFactory.CreateClient();
 
-            HttpResponseMessage response = await client.SendAsync(request);
+                HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<DatabaseResult>();
- 
-                if (result.Result is not null)
+                if (response.IsSuccessStatusCode)
                 {
-                    people = JsonConvert.DeserializeObject<List<Person>>(result.Result.ToString());
+                    var result = await response.Content.ReadFromJsonAsync<DatabaseResult>();
+
+                    if (result.Result is not null)
+                    {
+                        var resultList = result.Result.ToString();
+                        People = JsonConvert.DeserializeObject<List<Person>>(resultList);
+                    }
+                    else
+                    {
+                      Message = result.Message;
+                    }
                 }
-            }
-            else
-            {
-                result.Message = $"Cannot connect to API: {response.ReasonPhrase}";
-            }
+                else
+                {
+                    Message = $"Cannot connect to API: {response.ReasonPhrase}";
+                }
         }
     }
 }
