@@ -28,8 +28,8 @@ else
 </table>
 }
 
-@if (Message is not null)
+@if (HasFatalErrors is true)
 {
-    <h1>@Message</h1>
+    ErrorMessage();
 }
 

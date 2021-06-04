@@ -1,4 +1,5 @@
-﻿using CRUD.Models;
+﻿using Blazored.Toast.Services;
+using CRUD.Models;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -13,9 +14,13 @@ namespace BlazorUI.Pages
         public List<Person> People { get; set; } = new();
         public DatabaseResult Result { get; set; } = new();
         public string Message { get; set; }
-        
+        public bool HasFatalErrors { get; set; }
+
         [Inject]
         protected  IHttpClientFactory _clientFactory { get; set; }
+
+        [Inject]
+        protected IToastService _toastService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -36,13 +41,19 @@ namespace BlazorUI.Pages
                     }
                     else
                     {
-                      Message = result.Message;
+                       Message = result.Message;
+                       HasFatalErrors = result.HasFatalErrors;
                     }
                 }
                 else
                 {
                     Message = $"Cannot connect to API: {response.ReasonPhrase}";
                 }
+        }
+
+        protected void ErrorMessage()
+        {
+            _toastService.ShowError(Message);
         }
     }
 }
